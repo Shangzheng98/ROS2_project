@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/ros/foxy/include",
+                "/opt/ros/foxy/include/**",
+                "/usr/include/opencv4",
+                "/usr/include/opencv4/**",
+                "${workspaceFolder}/src/auto_aim/include/**",
+                "${workspaceFolder}/src/auto_aim/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-arm64"
+        }
+    ],
+    "version": 4
+}
