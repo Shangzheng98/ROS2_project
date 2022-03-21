@@ -9,6 +9,7 @@ int main(int argc, char ** argv)
   cv::Mat frame;
   while (true)
   {
+    signal();
     v.read(frame);
     //armorDetector.armorTask(frame);
     cv::imshow("Live", frame);
