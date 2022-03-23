@@ -1,8 +1,8 @@
 #include <opencv2/opencv.hpp>
 #include <stdlib.h>
 #include "auto_aim/armor.hpp"
-//#include "rapidjson/document.h"
-//#include "rapidjson/filereadstream.h"
+#include <opencv2/core/mat.hpp>
+
 #include "rclcpp/rclcpp.hpp"
 class ArmorDetector {
 public:
@@ -10,8 +10,8 @@ public:
     ArmorDetector(rclcpp::Node::SharedPtr nh){
 
         nh_ = nh;
-
-        printf(" armor detector initing!\n");
+        declearAndLoadParameter();
+        RCLCPP_INFO(nh_->get_logger(), "armor detector initing!");
         t_start_ = cv::getTickCount();
         float x, y, z, small_width = 140, small_height = 60, big_width =230, big_height = 60;
         x = -small_width / 2;
@@ -64,7 +64,7 @@ public:
     int OFFSET_YAW;
     int OFFSET_PITCH;
 
-
+    bool debug_;
     rclcpp::Node::SharedPtr nh_;
 
 private:
@@ -94,11 +94,8 @@ private:
     uint8_t mode_{};
     uint8_t level_;
     std::vector<cv::Point2f> final_armor_2Dpoints;
-    cv::Mat cameraMatrix= (cv::Mat_<double>(3, 3) << 1293.5303221625442802, 0.3651215140945823, 355.9091806402759630,
-    0.0000000000000000, 1293.9256252855957428, 259.1868664367483461,
-    0.0000000000000000, 0.0000000000000000, 1.0000000000000000);;
-    cv::Mat distCoeffs = (cv::Mat_<double>(1, 5)
-            << -0.2126367859619807, 0.2282910064864265, 0.0020583387355406, 0.0006136511397638, -0.7559987171745171);
+    cv::Mat cameraMatrix;
+    cv::Mat distCoeffs;
 
 private:
     // 判断大小装甲板类型相关参数
@@ -113,4 +110,33 @@ private:
 
     std::vector<cv::Point3f> small_real_armor_points;
     std::vector<cv::Point3f> big_real_armor_points;
+
+
+    //ros
+    void declearAndLoadParameter() {
+        nh_->declare_parameter("color_threashold");
+        nh_->declare_parameter("gray_threashold");
+        nh_->declare_parameter("DEBUG");
+        nh_->declare_parameter("camere_matrix");
+        nh_->declare_parameter("dist_coeffs");
+
+        color_th_ = nh_->get_parameter("color_threashold").as_int();
+        gray_th_  = nh_->get_parameter("gray_threashold").as_int();
+        debug_    = nh_->get_parameter("DEBUG").as_bool();
+
+        std::vector<double> camera_temp = nh_->get_parameter("camere_matrix").as_double_array();
+        cameraMatrix = cv::Mat(3,3,CV_32FC1);
+        memcpy(cameraMatrix.data,camera_temp.data(), 9* sizeof(double));
+
+        std::vector<double> distCoeffs_temp = nh_->get_parameter("dist_coeffs").as_double_array();
+        distCoeffs   = cv::Mat(1,5,CV_32FC1);
+        memcpy(distCoeffs.data,distCoeffs_temp.data(),5 * sizeof(double));
+
+        RCLCPP_INFO(nh_->get_logger(),"color threashold: %d\n gray_threashold: %d\n DEBUG mode: %s\n camera matrix: %s\n dist coeffs: %s\n",
+                                    color_th_, 
+                                    gray_th_,
+                                    nh_->get_parameter("DEBUG").value_to_string().c_str(),
+                                    nh_->get_parameter("camere_matrix").value_to_string().c_str(),
+                                    nh_->get_parameter("dist_coeffs").value_to_string().c_str());
+    }
 };

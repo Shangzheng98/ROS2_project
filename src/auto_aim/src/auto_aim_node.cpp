@@ -18,7 +18,7 @@ int main(int argc, char ** argv)
   //RCLCPP_ERROR(rclcpp::get_logger(), "Error setting severity: %s", rcutils_get_error_string().str);
   while (true)
   {
-    RCLCPP_INFO_ONCE(nh_->get_logger(), "Timer callback called (this will only log once)");
+    RCLCPP_INFO_ONCE(nh_->get_logger(), "Start to process frame...");
     
     v.read(frame);
     //armorDetector.armorTask(frame);
