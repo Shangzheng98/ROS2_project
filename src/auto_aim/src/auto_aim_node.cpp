@@ -1,9 +1,11 @@
 #include <cstdio>
 #include "auto_aim/auto_aim.hpp"
-// #include "rcutils/error_handling.h"
-// #include "rclcpp/logger.hpp"
-void signal_handle(int sig){ // can be called asynchronously
-  rclcpp::shutdown(); // set flag
+
+bool while_flag = true;
+void signal_handle(int flag){
+  while_flag = false;
+
+  
 }
 
 int main(int argc, char ** argv)
@@ -14,18 +16,18 @@ int main(int argc, char ** argv)
   
   ArmorDetector armorDetector(nh_);
   cv::Mat frame;
+  
   signal(SIGINT,signal_handle);
-  //RCLCPP_ERROR(rclcpp::get_logger(), "Error setting severity: %s", rcutils_get_error_string().str);
-  while (true)
+  while (while_flag)
   {
     RCLCPP_INFO_ONCE(nh_->get_logger(), "Start to process frame...");
     
     v.read(frame);
-    //armorDetector.armorTask(frame);
-    cv::imshow("Live", frame);
-    cv::waitKey(1);
+    armorDetector.execute(frame);
+    //cv::imshow("Live", frame);
+    //cv::waitKey(1);
   }
-  
+  rclcpp::shutdown();
   return 0;
 
 }

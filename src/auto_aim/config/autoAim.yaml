@@ -2,8 +2,21 @@ auto_aim_node:
   ros__parameters:
     color_threashold: 13
     gray_threashold: 24
+
     DEBUG: True
+    ROI_enable: True
+
+    yaw_offset: 10
+    pitch_offset: 10
+
     camere_matrix: [1293.5303221625442802, 0.3651215140945823, 355.9091806402759630, 
                     0.0000000000000000, 1293.9256252855957428, 259.1868664367483461,
                     0.0000000000000000, 0.0000000000000000, 1.0000000000000000]
     dist_coeffs: [-0.2126367859619807, 0.2282910064864265, 0.0020583387355406, 0.0006136511397638, -0.7559987171745171]
+
+    small_armor:
+      width: 140.0
+      height: 60.0
+    big_armor:
+      width: 230.0
+      height: 60.0
