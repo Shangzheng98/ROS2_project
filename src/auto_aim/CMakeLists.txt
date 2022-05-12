@@ -29,7 +29,8 @@ include_directories(include ${OpenCV_INCLUDE_DIRS})
 
 add_executable(auto_aim_node src/auto_aim_node.cpp
                              src/auto_aim.cpp 
-                             src/armor.cpp)
+                             src/armor.cpp
+                             )
                 
 ament_target_dependencies(auto_aim_node rclcpp std_msgs)
 target_link_libraries( auto_aim_node ${OpenCV_LIBS} )

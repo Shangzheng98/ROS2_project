@@ -14,7 +14,7 @@ int main(int argc, char ** argv)
   rclcpp::init(argc,argv);
   rclcpp::Node::SharedPtr nh_ = rclcpp::Node::make_shared("auto_aim");
   
-  ArmorDetector armorDetector(nh_);
+  ArmorDetector* armorDetector = new ArmorDetector(nh_);
   cv::Mat frame;
   
   signal(SIGINT,signal_handle);
@@ -23,11 +23,12 @@ int main(int argc, char ** argv)
     RCLCPP_INFO_ONCE(nh_->get_logger(), "Start to process frame...");
     
     v.read(frame);
-    armorDetector.execute(frame);
+    armorDetector->execute(frame);
     //cv::imshow("Live", frame);
     //cv::waitKey(1);
   }
   rclcpp::shutdown();
+  
   return 0;
 
 }

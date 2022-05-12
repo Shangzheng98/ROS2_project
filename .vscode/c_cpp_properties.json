@@ -1,22 +1,25 @@
 {
-  "configurations": [
-    {
-      "browse": {
-        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
-        "limitSymbolsToIncludedHeaders": false
-      },
-      "includePath": [
-        "/opt/ros/foxy/include/**",
-        "/home/parallels/ros2_ws/src/auto_aim/include/**",
-        "/home/parallels/ros2_ws/src/uros/micro-ROS-Agent/micro_ros_agent/include/**",
-        "/usr/include/**"
-      ],
-      "name": "ROS",
-      "intelliSenseMode": "gcc-arm64",
-      "compilerPath": "/usr/bin/gcc",
-      "cStandard": "gnu11",
-      "cppStandard": "c++14"
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "/opt/ros/foxy/include/**",
+                "${workspaceFolder}/src/auto_aim/include/**",
+                "/usr/include/",
+                "${workspaceFolder}/src/auto_aim/include/**",
+                "${workspaceFolder}/src/refree/include/**",
+                "/usr/include/x86_64-linux-gnu/c++/9",
+                "/usr/include/x86_64-linux-gnu"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x86",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
 }

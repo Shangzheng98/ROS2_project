@@ -52,7 +52,7 @@ bool ArmorDetector::DetectArmor(cv::Mat &img, const cv::Rect &roi) {
 
     cvtColor(roi_image, gray, COLOR_BGR2GRAY);
     split(roi_image, BGR_channels);
-    if (color_ == 0) // opposite red
+    if (this->refree_->color == 0) // opposite red
     {
         subtract(BGR_channels[2], BGR_channels[1], color_result_img);
     } else {
@@ -244,10 +244,10 @@ void ArmorDetector::execute(cv::Mat &cameraFrame) {
         roi = Rect(0, 0, img_size.width, img_size.height);
     }
 
-    Point3f target_3d = {0, 0, 0};
+    // Point3f target_3d = {0, 0, 0};
 
     //for testing
-    publishData(20,20);
+    // publishData(20,20);
     // OFFSET_YAW = (OFFSET_INT_YAW - 1800);
     // OFFSET_PITCH = (OFFSET_INT_PITCH - 1800);
     if (DetectArmor(cameraFrame, roi)) {

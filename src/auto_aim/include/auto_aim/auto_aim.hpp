@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "auto_aim/armor.hpp"
 #include "rclcpp/rclcpp.hpp"
-
+#include "auto_aim/refree_system.hpp"
 #include <chrono>
 #include <functional>
 #include <memory>
@@ -20,8 +20,7 @@ public:
 
         nh_ = nh;
         publisher_ = nh_->create_publisher<std_msgs::msg::Int32>("gimbal_data",10);
-
-        subscription_ini();
+        refree_ = std::make_shared<Refree>();
         declearAndLoadParameter();
         
         RCLCPP_INFO(nh_->get_logger(), "armor detector initing!");
@@ -51,6 +50,8 @@ public:
     bool debug_;
     rclcpp::Node::SharedPtr nh_;
 
+    std::shared_ptr<Refree> refree_;
+
 private:
     bool makeRectSafe(cv::Rect &rect, const cv::Size &size) {
         if (rect.x < 0)
@@ -72,9 +73,9 @@ private:
     int lost_count = 0;
     int detect_count = 0;
 
-    uint8_t color_;
-    uint8_t level_;
-    uint8_t type_;
+    // uint8_t color_;
+    // uint8_t level_;
+    // uint8_t type_;
     std::vector<cv::Point2f> final_armor_2Dpoints;
 
 
@@ -176,31 +177,9 @@ private:
         
         big_real_armor_points.emplace_back(x, y, z);
     }
-    void subscription_ini() {
-        color_subscription_ = nh_->create_subscription<std_msgs::msg::Int8>("team_color", 10,std::bind(&color_callback,nh_,_1));
-        type_subscription_ = nh_->create_subscription<std_msgs::msg::Int8>("robot_type", 10, std::bind(&type_callback,nh_,_1));
-        level_subscription_ = nh_->create_subscription<std_msgs::msg::Int8>("robot_level",10,std::bind(&level_callback,nh_,_1));
-    }
 
-    void color_callback(const std::shared_ptr<std_msgs::msg::Int8> msg) const {
-        if (msg->data == 0) { // team color is red
-            color_ = 1;
-            
-        }
-        else { //
-            color_ = 0;
-        }
 
-        RCLCPP_INFO(nh_->get_logger(), "the team_color is '%d', 0 is read, 1 is blue", msg->data);
-    }
-
-    void type_callback(const std::shared_ptr<std_msgs::msg::Int8> msg) const {
-        
-    }
-
-    void level_callback(const std::shared_ptr<std_msgs::msg::Int8> msg) const {
-        level_ = msg->data;
-    }
+    
     cv::Point3f getPose() {
         cv::Mat rvec;
         cv::Mat tvec;
